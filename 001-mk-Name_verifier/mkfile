@@ -1,1 +1,49 @@
- #
+## Bloque de ejercicio para entender mk
+## Esta es la receta del pastel
+## Esa es la estructura de un encabezado de receta mk
+#TARGET: PREREQ
+#pastel_de_manzana: base_de_pan cubierta_de_manzana
+#	echo "Mezclar $prereq"
+#	echo "dejar enfriar"
+#	echo "EXITO, ya tienes tu pastel"
+#
+#base_de_pan: harina huevo 
+#	echo "mezclar ingredientes"
+#	echo "hornear"
+#
+#cubierta_de_manzana: manzana azucar
+#	echo "machacar manzana"
+#	echo "endulzar la mezcla"
+#
+#harina:
+#	echo "comprar $target"
+#
+#huevo:
+#	echo "comprar $target"
+#
+#manzana:
+#	echo "comprar $target"
+#
+#azucar:
+#	echo "comprar $target"
+## FINALIZA bloque de ejercicio para entender mk
+#############################################################
+SampleName_S1_L001_R1_001.fastq.gz.resultados_de_verificador_de_nombre.txt: data/SampleName_S1_L001_R1_001.fastq.gz
+	echo "[DEBUGGIN] Voy a verificar que el archivo $prereq cumpla con la estructura de nombre propuesta por Illumina"
+	echo "[DEBUGGIN] Voy a reportar el resultado de la verificacion en $target"
+	FILE_NAME_WITHOUT_PATH=$(basename -- "$prereq")
+	echo "[DEBUGGING] El FILE NAME es $FILE_NAME_WITHOUT_PATH"
+	FASTQ_EXTENSION=`echo $FILE_NAME_WITHOUT_PATH | grep -c ".fastq.gz"`
+	echo "[DEBBUGING] La extension del archivo es $FASTQ_EXTENSION"
+	NUMBER_OF_FIELDS_IN_NAME=`echo $FILE_NAME_WITHOUT_PATH | tr "_" "\n" | wc -l`
+        echo "[DEBBUGING] La variable numero de campos es $NUMBER_OF_FIELDS_IN_NAME"
+	SAMPLE_NAME=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f1` 
+	echo "[DEBBUGING] El nombre de la muestra es $SAMPLE_NAME"
+	SAMPLE_NUMBER=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f2`
+	echo "[DEBBUGING] El numero de la muestra es $SAMPLE_NUMBER"
+	LANE=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f3`
+	echo "[DEBBUGING] El carril correspondiente a la muestra es $LANE"
+	READ=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f4`
+	echo "[DEBBUGING] La read en cuestion es $READ"
+	LAST_SEGMENT=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f5 | cut -d "." -f1`
+	echo "[DEBBUGING] El ultimo segmento del nombre es $LAST_SEGMENT"
