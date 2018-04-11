@@ -28,8 +28,12 @@
 #	echo "comprar $target"
 ## FINALIZA bloque de ejercicio para entender mk
 #############################################################
-SampleName_S1_L001_R1_001.fastq.gz.resultados_de_verificador_de_nombre.txt:Q: data/SampleName_S1_L001_R1_001.fastq.gz
+#SampleName_S1_L001_R1_001.fastq.gz.verification:Q: data/SampleName_S1_L001_R1_001.fastq.gz
+## El uso del caracter %, permite generar encabezados de receta DINAMICOS. Lo que captura el caracter % del lado del target, es el mismo valor que buscar en el nombre del archivo del lado del prereq
+results/%.fastq.gz.verification:Q: data/%.fastq.gz
+	mkdir -p `dirname $target`
 	{
+	#echo "[DEBUGGING] la variable % es $stem"
 	#echo "[DEBUGGIN] Voy a verificar que el archivo $prereq cumpla con la estructura de nombre propuesta por Illumina"
 	#echo "[DEBUGGIN] Voy a reportar el resultado de la verificacion en $target"
 	FILE_NAME_WITHOUT_PATH=$(basename -- "$prereq")
@@ -66,5 +70,9 @@ SampleName_S1_L001_R1_001.fastq.gz.resultados_de_verificador_de_nombre.txt:Q: da
         else
                 echo "[OK] file name sucessfully validated"
 	fi
-	} && > $target.build \
+	} > $target.build \
 	&& mv $target.build $target
+
+all:V:
+	set -x
+	bin/create-targets | xargs mk

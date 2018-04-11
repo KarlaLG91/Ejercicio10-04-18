@@ -1,0 +1,3 @@
+#Los archivos que se enlisten aqui seran ignorados por git. Es decir nunca los va a seguir para versionar, no nos va a sugerir que hagamos commit ni va aseguir los cambios que se generen en estos archivos.
+#Ignorando los archivos con extension .swp.
+*.swp
