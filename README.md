@@ -1,29 +1,29 @@
-#mk-Name verifier - mk module to identify file name format following Illumina conventions.
+# mk-Name verifier - mk module to identify file name format following Illumina conventions.
 
-##About mk-Name verifier
+## About mk-Name verifier
 
 The name verifier module validates whether the files provided, are named following the Illumina conventions [1].
 
 IMPORTANT NOTE: The name verifier module validates only fastaq.gz files.
 
-##Module configuration.
+## Module configuration.
 
-###Input files
+### Input files
 
 Name verifier requires:
-..*Multiple files with .fastq.gz index. Sample files must be locates at data/
+..* Multiple files with .fastq.gz index. Sample files must be locates at data/
 
-###Configuration file
+### Configuration file
 The module includes a config. mk file that is currently empty.
 
-##Module description
+## Module description
 
 The module takes multiple fastq.gz files as input and verifies if they are named correctly using mk all. For each input file, the module  identifies the five requered elements needed for a proper labeling. Namely, sample name, sample number, lane number, r$
 Each file is evaluated separately and a fastaq.gz.validation file is created to document wheter the following conditions are met for each element:
-        *Fields in name.- the name requieres 5 elements.
-        *Lane.- the lane number must be from 1-8 only.
-        *Read.- there must only be R1 or R2 for each sample.
-        *Last segment.- this element should alwasy be 001.
+        * Fields in name.- the name requieres 5 elements.
+        * Lane.- the lane number must be from 1-8 only.
+        * Read.- there must only be R1 or R2 for each sample.
+        * Last segment.- this element should alwasy be 001.
 
 ````
 .	##Module main directory.
@@ -40,11 +40,11 @@ Each file is evaluated separately and a fastaq.gz.validation file is created to 
 │       └── SampleName_S1_L001_R1_001.fastq.gz.verification
 └── README.md	##This document. General workflow description.
 ````
-##References
+## References
 
 [1] Illumina naming convention <https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/NamingConvention_FASTQ-files-swBS.htm>
 
-##Author info
+## Author info
 
 Developed by Karla Lozano for Winter Genomics.
 
