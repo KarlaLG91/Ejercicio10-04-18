@@ -1,7 +1,7 @@
 ## Bloque de ejercicio para entender mk
 ## Esta es la receta del pastel
 ## Esa es la estructura de un encabezado de receta mk
-#TARGET: PREREQ
+#TARGET:ATRIBUTOS: PREREQ
 #pastel_de_manzana: base_de_pan cubierta_de_manzana
 #	echo "Mezclar $prereq"
 #	echo "dejar enfriar"
@@ -28,22 +28,43 @@
 #	echo "comprar $target"
 ## FINALIZA bloque de ejercicio para entender mk
 #############################################################
-SampleName_S1_L001_R1_001.fastq.gz.resultados_de_verificador_de_nombre.txt: data/SampleName_S1_L001_R1_001.fastq.gz
-	echo "[DEBUGGIN] Voy a verificar que el archivo $prereq cumpla con la estructura de nombre propuesta por Illumina"
-	echo "[DEBUGGIN] Voy a reportar el resultado de la verificacion en $target"
+SampleName_S1_L001_R1_001.fastq.gz.resultados_de_verificador_de_nombre.txt:Q: data/SampleName_S1_L001_R1_001.fastq.gz
+	{
+	#echo "[DEBUGGIN] Voy a verificar que el archivo $prereq cumpla con la estructura de nombre propuesta por Illumina"
+	#echo "[DEBUGGIN] Voy a reportar el resultado de la verificacion en $target"
 	FILE_NAME_WITHOUT_PATH=$(basename -- "$prereq")
-	echo "[DEBUGGING] El FILE NAME es $FILE_NAME_WITHOUT_PATH"
+	#echo "[DEBUGGING] El FILE NAME es $FILE_NAME_WITHOUT_PATH"
 	FASTQ_EXTENSION=`echo $FILE_NAME_WITHOUT_PATH | grep -c ".fastq.gz"`
-	echo "[DEBBUGING] La extension del archivo es $FASTQ_EXTENSION"
+	#echo "[DEBBUGING] La extension del archivo es $FASTQ_EXTENSION"
 	NUMBER_OF_FIELDS_IN_NAME=`echo $FILE_NAME_WITHOUT_PATH | tr "_" "\n" | wc -l`
-        echo "[DEBBUGING] La variable numero de campos es $NUMBER_OF_FIELDS_IN_NAME"
+        #echo "[DEBBUGING] La variable numero de campos es $NUMBER_OF_FIELDS_IN_NAME"
 	SAMPLE_NAME=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f1` 
-	echo "[DEBBUGING] El nombre de la muestra es $SAMPLE_NAME"
+	#echo "[DEBBUGING] El nombre de la muestra es $SAMPLE_NAME"
 	SAMPLE_NUMBER=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f2`
-	echo "[DEBBUGING] El numero de la muestra es $SAMPLE_NUMBER"
+	#echo "[DEBBUGING] El numero de la muestra es $SAMPLE_NUMBER"
 	LANE=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f3`
-	echo "[DEBBUGING] El carril correspondiente a la muestra es $LANE"
+	#echo "[DEBBUGING] El carril correspondiente a la muestra es $LANE"
 	READ=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f4`
-	echo "[DEBBUGING] La read en cuestion es $READ"
+	#echo "[DEBBUGING] La read en cuestion es $READ"
 	LAST_SEGMENT=`echo $FILE_NAME_WITHOUT_PATH | cut -d"_" -f5 | cut -d "." -f1`
-	echo "[DEBBUGING] El ultimo segmento del nombre es $LAST_SEGMENT"
+	#echo "[DEBBUGING] El ultimo segmento del nombre es $LAST_SEGMENT"
+	if [ $NUMBER_OF_FIELDS_IN_NAME != '5' ] 
+        then
+                echo "[ERROR] Tu archivo no tiene 5 campos en su nombre"
+	elif [ $READ != 'R1' ] && [ $READ != 'R2' ]
+        then
+                echo "[ERROR] Tu archivo no cumple con convencion R1 o R2"
+	elif [ $LANE != 'L001' ]
+        then
+                echo "[ERROR] Tu archivo no identifica los carriles"
+	elif [ $LAST_SEGMENT != '001' ]
+        then
+                echo "[ERROR] Tu archivo no incluye el ultimo segmento 001"
+	elif [ $FASTQ_EXTENSION != "1" ]
+        then
+                echo "[ERROR] LA extension del archivo no es la adecuada"
+        else
+                echo "[OK] file name sucessfully validated"
+	fi
+	} && > $target.build \
+	&& mv $target.build $target
